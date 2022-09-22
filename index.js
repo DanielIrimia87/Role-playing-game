@@ -1,11 +1,21 @@
 
+/**
+ * The first line of the function creates an array of diceCount zeros. The second line maps each zero
+ * to a random number between 1 and 6
+ * @param diceCount - The number of dice to roll.
+ * @returns An array of random numbers between 1 and 6.
+ */
+function getDiceRollArray(diceCount) {
+   return new Array(diceCount).fill(0).map(
+      () => Math.floor(Math.random() * 6) + 1);
+}
+
 /* Creating two objects, hero and monster, with properties. */
 const hero = {
    elementId: "hero", 
    name: "Wizard", 
    avatar: "images/wizard.png", 
    health: 60, 
-   diceRoll: [3, 1, 4],
    diceCount: 3
 }
 
@@ -14,56 +24,60 @@ const monster = {
    name: "Orc", 
    avatar: "images/orc.png", 
    health: 10, 
-   diceRoll: [4],
    diceCount: 1
 }
 
-function getDiceRollArray(diceCount) {
-   const newDiceRoll = [];
-   for (let i = 0; i < diceCount; i++) {
-      newDiceRoll.push(Math.floor(Math.random() * 6) + 1);
-   }
-   return newDiceRoll;
-}
 
-/**
- * `getDiceHtml` takes a number of dice to roll, and returns a string of HTML that represents the dice
- * rolls.
- * @param diceCount - The number of dice to roll.
- * @returns An array of strings.
- */
-function getDiceHtml(diceCount) {
-   return getDiceRollArray(diceCount).map((diceRoll) => `
-      <div class="dice">${diceRoll}</div>
-   `).join("");
-}
+/* Creating a new class called Character. */
+class Character {
+   constructor(data) {
 
-/**
- * It takes in a data object and uses it to render a character card
- * @param data - an object with the following properties:
- */
-function renderCharacter(data) {
+     /* Assigning the properties of the data object to the new instance of the Character class. */
+      Object.assign(this, data);
+     
+      /* method called getDiceHtml, which is a function that takes a parameter
+      called diceCount. */
+      this.getDiceHtml = (diceCount) => {
+            return getDiceRollArray(diceCount).map((num) => `
+            <div class="dice">${num}</div>
+         `).join("");
+      }
 
-   /* Destructuring the data object. */
-   const {elementId,name, avatar, health, diceRoll,diceCount } = data;
-   
-  /* Creating a new array of HTML elements. */
-   const diceHTML = getDiceHtml(diceCount);
-   
+      /* method called getHealthHtml */
+      this.getCharacterHtml = () => {
 
-   document.getElementById(elementId).innerHTML =
-   
-       `<div class="character-card">
+         /* Destructuring the data object. */
+         const { elementId, name, avatar, health, diceCount } = this;
 
-            <h4 class="name"> ${name} </h4>
-            <img class="avatar" src="${avatar}" />
-            <div class="health">health: <b> ${health} </b></div>
-            <div class="dice-container">
-               ${diceHTML}
+         /* Creating a new array of HTML elements. */
+         const diceHTML = this.getDiceHtml(diceCount);
+
+         return `
+            <div class="character-card">
+
+               <h4 class="name"> ${name} </h4>
+               <img class="avatar" src="${avatar}" />
+               <div class="health">health: <b> ${health} </b></div>
+               <div class="dice-container">
+                  ${diceHTML}
+               </div>
+
             </div>
-
-       </div>`
+         `;
+      };
+   }
 }
 
-renderCharacter(hero);
-renderCharacter(monster);
+/* Creating two new instances of the Character class. */
+const wizard = new Character(hero)
+const orc = new Character(monster)
+
+/* Creating a new function called renderCharacters. */
+function render() {
+   document.getElementById(wizard.elementId).innerHTML = wizard.getCharacterHtml();
+   document.getElementById(orc.elementId).innerHTML = orc.getCharacterHtml();
+}
+/* Calling the render function. */
+render();
+
+
