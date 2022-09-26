@@ -9,6 +9,17 @@
  function getDiceRollArray(diceCount) {
     return new Array(diceCount).fill(0).map(
        () => Math.floor(Math.random() * 6) + 1);
- }
+}
 
-export {getDiceRollArray};
+/**
+ * It returns a string of HTML that contains a number of placeholder dice equal to the number passed
+ * in.
+ * @param diceCount - The number of dice to display.
+ * @returns A string of HTML that contains a placeholder for each dice.
+ */
+function getDicePlaceholderHtml(diceCount) {
+      return new Array(diceCount).fill(0).map(
+         () => `<div class="placeholder-dice"></div>`).join(" ");
+}
+   
+export {getDiceRollArray, getDicePlaceholderHtml};
