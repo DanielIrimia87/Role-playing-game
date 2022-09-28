@@ -1,3 +1,4 @@
+// Language: javascript
 // Path:index.js  
 
 import characterData from './data.js'
